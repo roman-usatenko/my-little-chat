@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const fs = require('fs');
+const process = require('process');
 
 const app = express();
 const port = 3000;
@@ -12,7 +13,7 @@ const filesPath = 'data/files';
 const dbPath = 'data/database.db';
 
 // Connect to SQLite database
-const db = new sqlite3.Database(dbPath);
+const db = new sqlite3.Database(path.resolve(__dirname, dbPath));
 
 // Serve static files (including your HTML file)
 app.use(express.static(path.join(__dirname, 'static')));
@@ -64,6 +65,9 @@ app.post('/chat', (req, res) => {
     const timestamp = Date.now();
     const username = req.cookies.username;
     const message = req.body;
+    if (message === '!q') {
+        process.exit(); // Quit the Node.js app
+    }
     db.run('INSERT INTO messages (timestamp, username, message) VALUES (?, ?, ?)', [timestamp, username, message], (err) => {
         if (err) {
             throw err;
