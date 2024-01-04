@@ -3,6 +3,7 @@ $(document).ready(function () {
     const messageInput = $('#message-input');
     const sendButton = $('#send-button');
     const setUsernameButton = $('#set-username-button');
+    const fileInput = $('#file-input');
 
     sendButton.on('click', function () {
         sendUserMessage();
@@ -42,24 +43,63 @@ $(document).ready(function () {
         messages.forEach(function (message) {
             const date = new Date(message.timestamp);
             const formattedDate = date.toLocaleString();
-            chatHistory.append(`<div class="message"><div class="message-header"><span class="username">${message.username}</span> <span class="timestamp">${formattedDate}</span></div><pre class="message-text">${message.message}</pre></div>`);
+            var messageText = message.message;
+            if (message.filename) {
+                messageText = `<a href="/download/${message.id}" target="_blank">${message.filename}</a>`;
+            }
+            chatHistory.append(`<div class="message"><div class="message-header"><span class="username">${message.username} &nbsp;&nbsp; ${formattedDate}</span>&nbsp;&nbsp;<button class="delete-button btn btn-light btn-sm" data-id="${message.id}">&#215;</button></div><div class="message-text">${messageText}</div></div>`);
         });
         chatHistory.scrollTop(chatHistory[0].scrollHeight);
+        $('.delete-button').click(function () {
+            const messageId = $(this).data('id');
+            if (confirm('Sure?')) {
+                $.ajax({
+                    url: '/chat/' + messageId,
+                    type: 'DELETE',
+                    success: function (response) {
+                        renderMessages(response);
+                    },
+                    error: function () {
+                        alert('Error deleting message');
+                    }
+                });
+            }
+        });
     }
 
     function sendUserMessage() {
-        const message = messageInput.val().trim();
+        var message = $('#message-input').html().trim();
         if (message) {
             $.ajax({
                 url: '/chat',
                 type: 'POST',
                 data: message,
-                contentType: 'text/plain; charset=utf-8',
+                contentType: 'text/html; charset=utf-8',
                 success: function (response) {
-                    messageInput.val('');
+                    messageInput.html('');
                     renderMessages(response);
                 }, error: function () {
                     alert('Error sending message');
+                }
+            });
+        }
+        var file = fileInput.prop('files')[0];
+        if (file) {
+            var formData = new FormData();
+            var blob = new Blob([file], {type: file.type});
+            formData.append('file', blob, encodeURIComponent(file.name));
+            $.ajax({
+                url: '/upload',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    fileInput.val(''); 
+                    renderMessages(response);
+                },
+                error: function() {
+                    alert('Error uploading file');
                 }
             });
         }
