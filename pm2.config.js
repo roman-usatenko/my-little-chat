@@ -3,7 +3,7 @@ module.exports = {
         {
             name: 'my-little-chat-app',
             script: 'index.js',
-            watch: true,
+            watch: false,
             env: {
                 NODE_ENV: 'production'
             },
