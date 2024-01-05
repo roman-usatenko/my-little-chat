@@ -7,7 +7,7 @@ $(document).ready(function () {
     const appVersion = $('#app-version');
 
     sendButton.on('click', function () {
-        sendUserMessage();
+        sendMessage();
     });
 
     setUsernameButton.on('click', function () {
@@ -17,7 +17,7 @@ $(document).ready(function () {
     messageInput.on('keydown', function (event) {
         if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
             event.preventDefault();
-            sendUserMessage();
+            sendMessage();
         }
     });
 
@@ -68,7 +68,7 @@ $(document).ready(function () {
         });
     }
 
-    function sendUserMessage() {
+    function sendMessage() {
         var message = $('#message-input').html().trim();
         if (message) {
             $.ajax({
