@@ -53,7 +53,7 @@ $(document).ready(function () {
                 }
                 messageText += `<a href="/download/${message.id}" target="_blank">${message.filename}</a>`;
             }
-            chatHistory.append(`<div class="message"><div class="message-header"><span class="username">${message.username} &nbsp;&nbsp; ${formattedDate}</span>&nbsp;&nbsp;<button class="delete-button btn btn-light btn-sm" data-id="${message.id}">&#215;</button></div><div class="message-text">${messageText}</div></div>`);
+            chatHistory.append(`<div class="message"><div class="message-header"><span class="username">${message.username} &nbsp;&nbsp; ${formattedDate}</span>&nbsp;&nbsp;<button class="delete-button btn btn-link btn-sm" data-id="${message.id}">&#215;</button></div><div class="message-text">${messageText}</div></div>`);
         });
         
         $('.delete-button').click(function () {

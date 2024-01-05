@@ -26,35 +26,29 @@ html, body {
     flex-grow: 1;
 }
 
-.message-wrapper {
+.editor {
+    min-height: 75px; 
+    max-height: 75px; 
+    overflow-y: auto;
+}
+
+.message {
+    border-radius: 5px;
+    border: 1px solid rgba(0,0,0,.125);
     margin-bottom: 5px;
 }
 
-.user-message {
-    background-color: #e6f2ff;
-    padding: 8px;
-    margin-bottom: 5px;
-    border-radius: 5px;
-    max-width: 80%;
-    word-wrap: break-word;
-    float: right;
-    clear: both;
-}
-
-.server-response {
-    background-color: #f2f2f2;
-    padding: 8px;
-    margin-bottom: 5px;
-    border-radius: 5px;
-    max-width: 80%;
-    word-wrap: break-word;
-    float: left;
-    clear: both;
-}
 .message-header {
+    background-color: #f8f9fa;
     font-weight: bold;
     text-align: right;
     font-size: x-small;
+}
+
+.message-text {
+    padding: 8px;
+    font-size: small;
+
 }
 
 .app-version {
