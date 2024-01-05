@@ -1,9 +1,13 @@
 #!/bin/sh
 echo "=============== Pulling changes ==============="
 cd "$(dirname "$0")"
-if git pull origin main; then
-  echo "No changes"
-else
+current_commit=$(git rev-parse HEAD)
+git pull origin master
+new_commit=$(git rev-parse HEAD)
+if [ "$current_commit" != "$new_commit" ]; then
+  echo "Changes pulled successfully. Updating dependencies and restarting PM2..."
   npm install
   /usr/local/bin/pm2 restart my-little-chat-app
+else
+  echo "No changes"
 fi
