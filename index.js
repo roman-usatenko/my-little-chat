@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('./db');
+const utils = require('./utils');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -94,6 +95,10 @@ app.get('/download/:id', (req, res) => {
             res.status(404).send('File not found');
         }
     });
+});
+
+app.get('/version', (req, res) => {
+    res.send(utils.version);
 });
 
 // Start the Express.js server

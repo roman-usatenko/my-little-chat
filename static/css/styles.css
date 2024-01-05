@@ -56,3 +56,7 @@ html, body {
     text-align: right;
     font-size: x-small;
 }
+
+.app-version {
+    font-size: x-small;
+}

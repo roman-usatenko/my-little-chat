@@ -4,6 +4,7 @@ $(document).ready(function () {
     const sendButton = $('#send-button');
     const setUsernameButton = $('#set-username-button');
     const fileInput = $('#file-input');
+    const appVersion = $('#app-version');
 
     sendButton.on('click', function () {
         sendUserMessage();
@@ -106,6 +107,13 @@ $(document).ready(function () {
     }
 
     initUsernameButton();
+
+    $.get('/version', function (response) {
+        appVersion.text("v." +response);
+    }).fail(function () {
+        appVersion.text('v.err');
+    });
+
     $.get('/chat', function (response) {
         renderMessages(response);
     }).fail(function () {
