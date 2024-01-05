@@ -41,8 +41,18 @@ html, body {
 .message-header {
     background-color: #f8f9fa;
     font-weight: bold;
-    text-align: right;
     font-size: x-small;
+    padding: 8px;
+}
+
+.delete-button {
+    color: red;
+    cursor:pointer;
+}
+
+.delete-button:hover {
+    color: red;
+    text-decoration: none;
 }
 
 .message-text {
