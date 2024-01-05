@@ -46,7 +46,12 @@ $(document).ready(function () {
             const formattedDate = date.toLocaleString();
             var messageText = message.message;
             if (message.filename) {
-                messageText = `<a href="/download/${message.id}" target="_blank">${message.filename}</a>`;
+                if(messageText) {
+                    messageText += '<br>';
+                } else {
+                    messageText = '';
+                }
+                messageText += `<a href="/download/${message.id}" target="_blank">${message.filename}</a>`;
             }
             chatHistory.append(`<div class="message"><div class="message-header"><span class="username">${message.username} &nbsp;&nbsp; ${formattedDate}</span>&nbsp;&nbsp;<button class="delete-button btn btn-light btn-sm" data-id="${message.id}">&#215;</button></div><div class="message-text">${messageText}</div></div>`);
         });
@@ -70,24 +75,11 @@ $(document).ready(function () {
 
     function sendMessage() {
         var message = $('#message-input').html().trim();
-        if (message) {
-            $.ajax({
-                url: '/chat',
-                type: 'POST',
-                data: message,
-                contentType: 'text/html; charset=utf-8',
-                success: function (response) {
-                    messageInput.html('');
-                    renderMessages(response);
-                }, error: function () {
-                    alert('Error sending message');
-                }
-            });
-        }
         var file = fileInput.prop('files')[0];
         if (file) {
             var formData = new FormData();
             var blob = new Blob([file], {type: file.type});
+            formData.append('message', encodeURIComponent(message));
             formData.append('file', blob, encodeURIComponent(file.name));
             $.ajax({
                 url: '/upload',
@@ -101,6 +93,19 @@ $(document).ready(function () {
                 },
                 error: function() {
                     alert('Error uploading file');
+                }
+            });
+        } else if (message) {
+            $.ajax({
+                url: '/chat',
+                type: 'POST',
+                data: message,
+                contentType: 'text/html; charset=utf-8',
+                success: function (response) {
+                    messageInput.html('');
+                    renderMessages(response);
+                }, error: function () {
+                    alert('Error sending message');
                 }
             });
         }

@@ -24,7 +24,8 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         const username = req.cookies.username;
         const filename = decodeURIComponent(file.originalname);
-        db.insertMessage(username, null, filename, (id) => {
+        const message = decodeURIComponent(req.body.message);
+        db.insertMessage(username, message, filename, (id) => {
             cb(null, "" + id);
         });
     }
@@ -79,8 +80,8 @@ app.delete('/chat/:id', (req, res) => {
 });
 
 app.post('/upload', upload.single('file'), (req, res) => {
-    readAllMessages(res);
-});
+        readAllMessages(res);
+    });
 
 app.get('/download/:id', (req, res) => {
     const id = req.params.id;
