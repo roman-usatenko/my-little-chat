@@ -11,6 +11,7 @@ const process = require('process');
 const app = express();
 const port = 3000;
 const filesPath = 'data/files';
+const appVersion = utils.version;
 
 // Serve static files (including your HTML file)
 app.use(express.static(path.join(__dirname, 'static')));
@@ -98,10 +99,10 @@ app.get('/download/:id', (req, res) => {
 });
 
 app.get('/version', (req, res) => {
-    res.send(utils.version);
+    res.send(appVersion);
 });
 
 // Start the Express.js server
 app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+    console.log(`Server v.${appVersion} running on http://localhost:${port}`);
 });

@@ -1,13 +1,12 @@
-const { exec } = require('child_process');
+const { execSync } = require('child_process');
 
 const exp = {};
 
-exec('git rev-parse HEAD', (err, stdout, stderr) => {
-    if (err) {
-        exp.version = "unknown";
-    } else {
-        exp.version = stdout.slice(0, 8);
-    }
-});
+try {
+    const stdout = execSync('git rev-parse HEAD');
+    exp.version = stdout.toString().slice(0, 8);
+} catch (err) {
+    exp.version = "unknown";
+}
 
 module.exports = exp;

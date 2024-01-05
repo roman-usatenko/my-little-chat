@@ -13,7 +13,7 @@ function checkError(err) {
 }
 
 function readAllMessages(cb) {
-    db.all('SELECT * FROM messages ORDER BY id', [], (err, rows) => {
+    db.all('SELECT * FROM messages ORDER BY id DESC', [], (err, rows) => {
         checkError(err);
         cb(rows);
     });
