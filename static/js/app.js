@@ -50,7 +50,7 @@ $(document).ready(function () {
             }
             chatHistory.append(`<div class="message"><div class="message-header"><span class="username">${message.username} &nbsp;&nbsp; ${formattedDate}</span>&nbsp;&nbsp;<button class="delete-button btn btn-light btn-sm" data-id="${message.id}">&#215;</button></div><div class="message-text">${messageText}</div></div>`);
         });
-        chatHistory.scrollTop(chatHistory[0].scrollHeight);
+        
         $('.delete-button').click(function () {
             const messageId = $(this).data('id');
             if (confirm('Sure?')) {
