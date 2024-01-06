@@ -45,15 +45,42 @@ $(document).ready(function () {
             const date = new Date(message.timestamp);
             const formattedDate = date.toLocaleString();
             var messageText = message.message;
-            if (message.filename) {
-                if(messageText) {
-                    messageText += '<br>';
-                } else {
-                    messageText = '';
-                }
-                messageText += `<a href="/files/download/${message.id}" target="_blank">${message.filename}</a>`;
+            if(!messageText) {
+                messageText = '';
             }
-            chatHistory.append(`<div class="message"><div class="message-header d-flex justify-content-between"><a class="delete-button" data-id="${message.id}">&#215;</a><span class="username">${message.username} &nbsp;&nbsp; ${formattedDate}</span></div><div class="message-text">${messageText}</div></div>`);
+            if (message.filename) {
+                messageText += '</div><div class="message-footer">' +
+                `<a href="/files/download/${message.id}" target="_blank">` +
+                '<img class="download-icon" src="/icons/download.svg" /> ' +
+                `${message.filename}</a>`;
+            }
+            chatHistory.append(`<div class="message">`+
+                `<div class="message-header d-flex justify-content-between">`+
+                `<img class="delete-button" data-id="${message.id}" src="/icons/x-square.svg" />`+
+                `<span class="username">${message.username} &nbsp;&nbsp; ${formattedDate}</span>`+
+                `<img class="copy-button" data-id="${message.id}" src="/icons/clipboard.svg" alt="Copy to clipboard" />`+
+                `</div>`+
+                `<div class="message-text" id="messageDiv${message.id}">${messageText}</div>`+
+                `</div>`);
+        });
+
+        $('.copy-button').click(function () {
+            const messageId = $(this).data('id');
+            const messageDiv = $('#messageDiv' + messageId);
+
+            const range = document.createRange();
+            range.selectNode(messageDiv[0]);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges();
+
+            const originalSrc = $(this).attr('src');
+            $(this).attr('src', '/icons/clipboard-check.svg');
+
+            setTimeout(() => {
+                $(this).attr('src', originalSrc);
+            }, 2000);
         });
         
         $('.delete-button').click(function () {
