@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
-const process = require('process');
 const db = require('../db');
 const config = require('../config');
 
@@ -18,9 +17,6 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     const username = req.cookies.username;
     const message = req.body;
-    if (message === '!q') {
-        process.exit(); // Quit the Node.js app
-    }
     db.insertMessage(username, message, null, (id) => {
         readAllMessages(res);
     });
