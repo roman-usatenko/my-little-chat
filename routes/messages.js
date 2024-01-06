@@ -15,8 +15,8 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const username = req.cookies.username;
-    const message = req.body;
+    const username = config.utils.getUsername(req);
+    const message = config.utils.sanitizeMessage(req.body);
     db.insertMessage(username, message, null, (id) => {
         readAllMessages(res);
     });

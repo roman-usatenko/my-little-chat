@@ -10,9 +10,9 @@ const DOWNLOAD_ROUTE = '/download/:id';
 const storage = multer.diskStorage({
     destination: config.files,
     filename: (req, file, cb) => {
-        const username = req.cookies.username;
+        const username = config.utils.getUsername(req);
         const filename = decodeURIComponent(file.originalname);
-        const message = decodeURIComponent(req.body.message);
+        const message = config.utils.sanitizeMessage(decodeURIComponent(req.body.message));
         db.insertMessage(username, message, filename, (id) => {
             cb(null, "" + id);
         });

@@ -1,4 +1,5 @@
 const { execSync } = require('child_process');
+const sanitizeHtml = require('sanitize-html');
 
 const config = {};
 
@@ -12,5 +13,25 @@ try {
 } catch (err) {
     config.version = "unknown";
 }
+
+// defining utility functions
+
+function getUsername(request) {
+    const username = request.cookies.username;
+    const sanitizedUsername = username.replace(/[^a-zA-Z0-9\s._-]/g, '').trim();
+    return sanitizedUsername;
+}
+
+function sanitizeMessage(message) {
+    const sanitizedMessage = sanitizeHtml(message);
+    return sanitizedMessage;
+}
+
+const utils = {
+    getUsername,
+    sanitizeMessage
+};
+
+config.utils = utils;
 
 module.exports = config;
