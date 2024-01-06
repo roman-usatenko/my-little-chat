@@ -17,13 +17,23 @@ try {
 // defining utility functions
 
 function getUsername(request) {
-    const username = request.cookies.username;
+    var username = 'Anonymous';
+    if(request.cookies && request.cookies.username) {
+        username = request.cookies.username;
+    } 
     const sanitizedUsername = username.replace(/[^a-zA-Z0-9\s._-]/g, '').trim();
     return sanitizedUsername;
 }
 
 function sanitizeMessage(message) {
-    const sanitizedMessage = sanitizeHtml(message);
+    const sanitizedMessage = sanitizeHtml(message, {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ]),
+        allowedAttributes: {'img': ['src']},
+        allowedSchemes: [ 'data']
+    });
+    if(sanitizedMessage !== message) {
+        console.log(`Message sanitized: ${message} -> ${sanitizedMessage}`);
+    }
     return sanitizedMessage;
 }
 
