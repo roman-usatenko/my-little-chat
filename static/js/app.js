@@ -51,7 +51,7 @@ $(document).ready(function () {
                 } else {
                     messageText = '';
                 }
-                messageText += `<a href="/download/${message.id}" target="_blank">${message.filename}</a>`;
+                messageText += `<a href="/files/download/${message.id}" target="_blank">${message.filename}</a>`;
             }
             chatHistory.append(`<div class="message"><div class="message-header d-flex justify-content-between"><a class="delete-button" data-id="${message.id}">&#215;</a><span class="username">${message.username} &nbsp;&nbsp; ${formattedDate}</span></div><div class="message-text">${messageText}</div></div>`);
         });
@@ -60,7 +60,7 @@ $(document).ready(function () {
             const messageId = $(this).data('id');
             if (confirm('Sure?')) {
                 $.ajax({
-                    url: '/chat/' + messageId,
+                    url: '/messages/' + messageId,
                     type: 'DELETE',
                     success: function (response) {
                         renderMessages(response);
@@ -82,7 +82,7 @@ $(document).ready(function () {
             formData.append('message', encodeURIComponent(message));
             formData.append('file', blob, encodeURIComponent(file.name));
             $.ajax({
-                url: '/upload',
+                url: '/files/upload',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -97,7 +97,7 @@ $(document).ready(function () {
             });
         } else if (message) {
             $.ajax({
-                url: '/chat',
+                url: '/messages',
                 type: 'POST',
                 data: message,
                 contentType: 'text/html; charset=utf-8',
@@ -119,7 +119,7 @@ $(document).ready(function () {
         appVersion.text('v.err');
     });
 
-    $.get('/chat', function (response) {
+    $.get('/messages', function (response) {
         renderMessages(response);
     }).fail(function () {
         alert('Error getting chat history');
