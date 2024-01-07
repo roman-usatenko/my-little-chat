@@ -22,6 +22,6 @@ app.get('/version', (req, res) => {
     res.send(config.version);
 });
 
-app.listen(config.port, 'localhost', () => {
+app.listen(config.port, config.host, () => {
     console.log(`Server v.${config.version} running on http://localhost:${config.port}`);
 });

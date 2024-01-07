@@ -1,7 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-const dbPath = 'data/database.db';
-const db = new sqlite3.Database(path.resolve(__dirname, dbPath));
+const config = require('./config');
+const db = new sqlite3.Database(config.db);
 
 db.run('CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, timestamp INTEGER, username TEXT, message TEXT, filename TEXT)');
 

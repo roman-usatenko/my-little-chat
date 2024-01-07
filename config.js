@@ -4,8 +4,10 @@ const sanitizeHtml = require('sanitize-html');
 const config = {};
 
 config.port = process.env.PORT || 3000;
-config.db = "data/database.db";
-config.files = "data/files";
+config.host = process.env.HOST || 'localhost';
+config.dataPath = process.env.DATA || 'data';
+config.db = config.dataPath + "/database.db";
+config.files = config.dataPath + "/files";
 
 try {
     const stdout = execSync('git rev-parse HEAD');
