@@ -51,14 +51,14 @@ $(document).ready(function () {
             if (message.filename) {
                 messageText += '</div><div class="message-footer">' +
                 `<a href="/files/download/${message.id}" target="_blank">` +
-                '<img class="download-icon" src="/icons/download.svg" /> ' +
+                '<i class="fas fa-download"></i> ' +
                 `${message.filename}</a>`;
             }
             chatHistory.append(`<div class="message">`+
                 `<div class="message-header d-flex justify-content-between">`+
-                `<img class="delete-button" data-id="${message.id}" src="/icons/x-square.svg" />`+
+                `<i class="far fa-trash-alt delete-button" data-id="${message.id}" title="Delete record"></i>`+
                 `<span class="username">${message.username} &nbsp;&nbsp; ${formattedDate}</span>`+
-                `<img class="copy-button" data-id="${message.id}" src="/icons/clipboard.svg" alt="Copy to clipboard" />`+
+                `<i class="far fa-clipboard copy-button" data-id="${message.id}" title="Copy to clipboard"></i>`+
                 `</div>`+
                 `<div class="message-text" id="messageDiv${message.id}">${messageText}</div>`+
                 `</div>`);
@@ -75,12 +75,10 @@ $(document).ready(function () {
             document.execCommand("copy");
             window.getSelection().removeAllRanges();
 
-            const originalSrc = $(this).attr('src');
-            $(this).attr('src', '/icons/clipboard-check.svg');
-
+            $(this).attr('class', 'fas fa-clipboard-check copy-button');
             setTimeout(() => {
-                $(this).attr('src', originalSrc);
-            }, 2000);
+                $(this).attr('class', 'far fa-clipboard copy-button');
+            }, 1000);
         });
         
         $('.delete-button').click(function () {
@@ -100,6 +98,16 @@ $(document).ready(function () {
         });
     }
 
+    function spinSendButton(doSpin) {
+        if (doSpin) {
+            sendButton.prop('disabled', true);
+            sendButton.html('<i class="fas fa-spinner fa-spin"></i>');
+        } else {
+            sendButton.html('Send');
+            sendButton.prop('disabled', false);
+        }
+    }
+
     function sendMessage() {
         var message = $('#message-input').html().trim();
         var file = fileInput.prop('files')[0];
@@ -108,6 +116,7 @@ $(document).ready(function () {
             var blob = new Blob([file], {type: file.type});
             formData.append('message', encodeURIComponent(message));
             formData.append('file', blob, encodeURIComponent(file.name));
+            spinSendButton(true);
             $.ajax({
                 url: '/files/upload',
                 type: 'POST',
@@ -117,12 +126,15 @@ $(document).ready(function () {
                 success: function(response) {
                     fileInput.val(''); 
                     renderMessages(response);
+                    spinSendButton(false);
                 },
                 error: function() {
                     alert('Error uploading file');
+                    spinSendButton(false);
                 }
             });
         } else if (message) {
+            spinSendButton(true);
             $.ajax({
                 url: '/messages',
                 type: 'POST',
@@ -131,8 +143,10 @@ $(document).ready(function () {
                 success: function (response) {
                     messageInput.html('');
                     renderMessages(response);
+                    spinSendButton(false);
                 }, error: function () {
                     alert('Error sending message');
+                    spinSendButton(false);
                 }
             });
         }

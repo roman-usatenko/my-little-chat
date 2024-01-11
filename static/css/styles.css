@@ -53,7 +53,12 @@ html, body {
 
 .delete-button {
     color: red;
+    font-size: small;
     cursor:hand;
+}
+
+.send-button {
+    width: 100px;
 }
 
 .message-text {
@@ -68,7 +73,7 @@ html, body {
 
 .copy-button {
     cursor: hand;
-    width: 12;
+    font-size: small;
 }
 
 .download-button {
