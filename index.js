@@ -9,7 +9,7 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(cookieParser());
-app.use(bodyParser.text({ type: 'text/*' }));
+app.use(bodyParser.text({ type: 'text/*' , limit: '10mb'}));
 
 app.use('/messages', require('./routes/messages'));
 app.use('/files', require('./routes/files'));
