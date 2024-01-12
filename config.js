@@ -29,9 +29,9 @@ function getUsername(request) {
 
 function sanitizeMessage(message) {
     const sanitizedMessage = sanitizeHtml(message, {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ]),
-        allowedAttributes: {'img': ['src']},
-        allowedSchemes: [ 'data']
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' , 'a']),
+        allowedAttributes: {'img': ['src'], 'a': ['href']},
+        allowedSchemes: [ 'data', 'http', 'https']
     });
     if(sanitizedMessage !== message) {
         console.log(`Message sanitized: ${message} -> ${sanitizedMessage}`);
