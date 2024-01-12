@@ -6,7 +6,8 @@ $(document).ready(function () {
     const fileInput = $('#file-input');
     const appVersion = $('#app-version');
 
-    sendButton.on('click', function () {
+    sendButton.on('click', async function () {
+        await updateImageSources();
         sendMessage();
     });
 
@@ -14,9 +15,10 @@ $(document).ready(function () {
         setUsername();
     });
 
-    messageInput.on('keydown', function (event) {
+    messageInput.on('keydown', async function (event) {
         if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
             event.preventDefault();
+            await updateImageSources();
             sendMessage();
         }
     });
@@ -106,6 +108,27 @@ $(document).ready(function () {
             sendButton.html('Send');
             sendButton.prop('disabled', false);
         }
+    }
+
+    async function updateImageSources() {
+        const promises = [];
+        $('#message-input img').each(function() {
+            var src = $(this).attr('src');
+            if (src && !src.startsWith('data:')) {
+                const promise = fetch(src).then(response => response.blob()).then(blob => {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    });
+                }).then(dataUrl => {
+                    $(this).attr('src', dataUrl);
+                });
+                promises.push(promise);
+            }
+        });
+        await Promise.all(promises);
     }
 
     function sendMessage() {
