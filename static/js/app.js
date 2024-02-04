@@ -82,7 +82,7 @@ $(document).ready(function () {
                 $(this).attr('class', 'far fa-clipboard copy-button');
             }, 1000);
         });
-        
+
         $('.delete-button').click(function () {
             const messageId = $(this).data('id');
             if (confirm('Sure?')) {
@@ -147,7 +147,8 @@ $(document).ready(function () {
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    fileInput.val(''); 
+                    fileInput.val('');
+                    messageInput.html('');
                     renderMessages(response);
                     spinSendButton(false);
                 },
@@ -188,4 +189,4 @@ $(document).ready(function () {
     }).fail(function () {
         alert('Error getting chat history');
     });
-});        
+});
